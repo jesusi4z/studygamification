@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Estudio y Seguimiento — Parte Específica (Temas 1 al 31) | SMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(100, 116, 139, 0.4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(100, 116, 139, 0.7); }
+
+        .brain-canvas-wrapper {
+            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.95) 0%, rgba(9, 13, 22, 1) 100%);
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+    <!-- Top Notification / Toast Modal -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 dark:bg-slate-800 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center gap-3 text-sm font-medium transition-all">
+        <span id="toast-icon" class="text-emerald-400">●</span>
+        <span id="toast-msg">Progreso guardado</span>
+    </div>
+
+    <!-- Confirmation Modal (No alert/confirm) -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">¿Reiniciar todo el progreso?</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">Se borrarán los estados de los 31 temas, las casillas de puntos críticos marcadas y las notas personales guardadas en este navegador.</p>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">Cancelar</button>
+                <button onclick="executeReset()" class="px-4 py-2 rounded-lg text-sm font-semibold bg-rose-600 text-white hover:bg-rose-500">Sí, reiniciar todo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop for Collapsible Header -->
+    <div id="header-backdrop" onclick="closeHeaderMenu()" class="fixed inset-0 z-30 hidden bg-black/40 backdrop-blur-[2px] transition-opacity no-print"></div>
+
+    <!-- COMPACT TOP BAR WITH TOP-LEFT HAMBURGER MENU -->
+    <header class="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur">
+        <div class="max-w-[1600px] mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-3">
+            
+            <!-- Left: Hamburger Button + Compact Badge -->
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="hamburger-btn" onclick="toggleHeaderMenu()" aria-expanded="false" aria-label="Abrir o cerrar menú de cabecera" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-cyan-500/10 hover:border-cyan-500/40 text-slate-800 dark:text-slate-100 transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500 shrink-0 no-print" title="Desplegar / Ocultar Cabecera y Controles">
+                    <!-- 3-line Hamburger Icon -->
+                    <svg id="icon-hamburger" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <!-- Close X Icon -->
+                    <svg id="icon-close" class="w-5 h-5 hidden text-cyan-500" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 shrink-0">
+                        SMS · TENS INFORMÁTICA
+                    </span>
+                    <h1 class="text-xs sm:text-sm md:text-base font-bold text-slate-900 dark:text-white truncate">
+                        Guía Parte Específica (31 Temas)
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Right: Mini Progress Pill & Quick View Switcher -->
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="toggleHeaderMenu()" class="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-cyan-500/40 transition-colors text-xs font-mono">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span id="compact-stat-pill" class="font-bold text-slate-800 dark:text-slate-200">0/31 Dom · 0%</span>
+                </button>
+                <button onclick="toggleBrainPanel()" class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-purple-500/30 bg-purple-500/10 text-purple-600 dark:text-purple-300 hover:bg-purple-500/20 no-print" title="Mostrar u ocultar el Mapa Neuronal">
+                    🧠 <span class="hidden md:inline">Cerebro</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- COLLAPSIBLE DRAWER PANEL (HIDDEN BY DEFAULT) -->
+        <div id="collapsible-header-panel" class="hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl transition-all">
+            <div class="max-w-[1600px] mx-auto px-4 sm:px-6 py-5 space-y-5 max-h-[82vh] overflow-y-auto">
+                
+                <!-- Full Title & Action Buttons -->
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 uppercase">31 Temas Oficiales · Ritmo 1 Tema/Día</span>
+                        </div>
+                        <h2 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                            Guía de Estudio y Seguimiento — Parte Específica (Temas 1 al 31)
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                            Técnico Especialista en Informática — Servicio Murciano de Salud (SMS)
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 no-print">
+                        <button onclick="toggleTheme()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium flex items-center gap-1.5">
+                            <span id="theme-icon">☀️</span>
+                            <span id="theme-label">Modo Claro</span>
+                        </button>
+                        <button onclick="exportProgress()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium flex items-center gap-1.5">
+                            <span>⬇️</span> Exportar JSON
+                        </button>
+                        <label class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>⬆️</span> Importar JSON
+                            <input type="file" id="import-file" accept=".json" class="hidden" onchange="importProgress(event)">
+                        </label>
+                        <button onclick="window.print()" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium flex items-center gap-1.5">
+                            <span>🖨️</span> Imprimir
+                        </button>
+                        <button onclick="openConfirmModal()" class="px-3 py-2 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium">
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GLOBAL PROGRESS & BLOCK BARS -->
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                    <!-- Global -->
+                    <div class="bg-slate-100 dark:bg-slate-800/70 p-3 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">Progreso Global</span>
+                            <span id="stat-global-text" class="font-mono font-bold text-cyan-600 dark:text-cyan-400">0/31 (0%)</span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div id="stat-global-bar" class="h-full bg-gradient-to-r from-cyan-500 via-emerald-500 to-purple-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <div id="stat-counts-detail" class="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5 flex justify-between">
+                            <span>Dom: 0</span><span>Rep: 0</span><span>Est: 0</span><span>Pend: 31</span>
+                        </div>
+                    </div>
+
+                    <!-- Bloque I -->
+                    <div class="bg-slate-100/70 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="font-semibold text-cyan-600 dark:text-cyan-400 truncate">Bloque I (T1-T4)</span>
+                            <span id="stat-b1-text" class="font-mono font-bold">0/4</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div id="stat-b1-bar" class="h-full bg-cyan-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate">Administración Electrónica</p>
+                    </div>
+
+                    <!-- Bloque II -->
+                    <div class="bg-slate-100/70 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="font-semibold text-emerald-600 dark:text-emerald-400 truncate">Bloque II (T5-T9)</span>
+                            <span id="stat-b2-text" class="font-mono font-bold">0/5</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div id="stat-b2-bar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate">Tecnología Básica</p>
+                    </div>
+
+                    <!-- Bloque III -->
+                    <div class="bg-slate-100/70 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="font-semibold text-purple-600 dark:text-purple-400 truncate">Bloque III (T10-T21)</span>
+                            <span id="stat-b3-text" class="font-mono font-bold">0/12</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div id="stat-b3-bar" class="h-full bg-purple-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate">Desarrollo y Servicios TI</p>
+                    </div>
+
+                    <!-- Bloque IV -->
+                    <div class="bg-slate-100/70 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                        <div class="flex justify-between items-center text-xs mb-1">
+                            <span class="font-semibold text-amber-600 dark:text-amber-400 truncate">Bloque IV (T22-T31)</span>
+                            <span id="stat-b4-text" class="font-mono font-bold">0/10</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div id="stat-b4-bar" class="h-full bg-amber-500 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate">Sistemas y Comunicaciones</p>
+                    </div>
+                </div>
+
+                <!-- VIEW TOGGLES, SEARCH & FILTERS INSIDE DRAWER -->
+                <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col xl:flex-row gap-3 items-stretch xl:items-center justify-between">
+                    <div class="flex flex-wrap gap-2">
+                        <button id="tab-temario" onclick="switchMainView('temario'); closeHeaderMenu();" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-cyan-600 text-white shadow-sm">
+                            📚 Temario Completo (Bloques I - IV)
+                        </button>
+                        <button id="tab-pedagogica" onclick="switchMainView('pedagogica'); closeHeaderMenu();" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+                            ⚡ Orden Secuencia Pedagógica (Fases 1 - 4)
+                        </button>
+                        <button id="tab-matriz" onclick="switchMainView('matriz'); closeHeaderMenu();" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+                            🗺️ 7. Matriz de Síntesis y Hoja de Ruta
+                        </button>
+                        <button id="btn-toggle-brain" onclick="toggleBrainPanel(); closeHeaderMenu();" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border border-purple-500/30 bg-purple-500/10 text-purple-600 dark:text-purple-300 hover:bg-purple-500/20">
+                            🧠 Ocultar/Mostrar Mapa Neuronal
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap sm:flex-nowrap gap-2.5 flex-1 max-w-3xl">
+                        <div class="relative flex-1 min-w-[200px]">
+                            <input type="text" id="search-input" oninput="applyFilters()" placeholder="Buscar por nº tema, título, enunciado, ENS, HL7, OSI, SQL..." class="w-full pl-9 pr-4 py-2 rounded-xl text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-cyan-500">
+                            <span class="absolute left-3 top-2.5 text-slate-400 text-sm">🔍</span>
+                        </div>
+
+                        <select id="filter-bloque" onchange="applyFilters()" class="px-3 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-cyan-500">
+                            <option value="all">Todos los Bloques / Fases</option>
+                            <option value="1">Bloque I (Temas 1-4)</option>
+                            <option value="2">Bloque II (Temas 5-9)</option>
+                            <option value="3">Bloque III (Temas 10-21)</option>
+                            <option value="4">Bloque IV (Temas 22-31)</option>
+                        </select>
+
+                        <select id="filter-status" onchange="applyFilters()" class="px-3 py-2 rounded-xl text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-cyan-500">
+                            <option value="all">Todos los Estados</option>
+                            <option value="Pendiente">⏳ Pendiente</option>
+                            <option value="En estudio">📖 En estudio</option>
+                            <option value="Repaso">🔄 Repaso</option>
+                            <option value="Dominado">⚡ Dominado (Neurona Activa)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT GRID -->
+    <main class="max-w-[1600px] mx-auto px-4 sm:px-6 py-5">
+        <div class="flex flex-col xl:flex-row gap-6 items-start">
+
+            <!-- LEFT / MAIN COLUMN: SYLLABUS OR MATRIX -->
+            <div id="main-column" class="w-full xl:w-7/12 space-y-8">
+                
+                <!-- VIEW: TEMARIO (BLOQUES OR PEDAGOGICAL PHASES) -->
+                <div id="view-temario" class="space-y-8"></div>
+
+                <!-- VIEW: SECTION 7 MATRIZ DE SÍNTESIS Y HOJA DE RUTA -->
+                <div id="view-matriz" class="hidden space-y-6">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mb-3">
+                            7. Matriz de Síntesis y Hoja de Ruta para la Preparación
+                        </h2>
+                        <p class="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed mb-6">
+                            Para optimizar el tiempo de estudio y maximizar la retención técnica, el temario debe abordarse respetando las dependencias lógicas entre los diferentes módulos. La tabla siguiente sintetiza la estructura completa de los 31 temas específicos agrupados por sus áreas tecnológicas correspondientes:
+                        </p>
+
+                        <!-- Official Synthesis Table -->
+                        <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 mb-8">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 dark:bg-slate-800/90 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-bold border-b border-slate-200 dark:border-slate-700">
+                                        <th class="p-4">Bloque Temático Oficial</th>
+                                        <th class="p-4">Temas Comprendidos</th>
+                                        <th class="p-4">Área Tecnológica Principal</th>
+                                        <th class="p-4">Peso y Relevancia en el Examen</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-xs sm:text-sm">
+                                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                                        <td class="p-4 font-bold text-cyan-600 dark:text-cyan-400">Bloque I: Administración Electrónica</td>
+                                        <td class="p-4 font-mono whitespace-nowrap">Temas 1 a 4</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300">Legislación técnica, ENS, ENI, LOPDGDD y estándares de salud (HL7, DICOM, HCE)</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300"><span class="font-bold text-rose-600 dark:text-rose-400">Muy Alto:</span> Conexión directa con la normativa sanitaria pública y los sistemas del SMS.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                                        <td class="p-4 font-bold text-emerald-600 dark:text-emerald-400">Bloque II: Tecnología Básica</td>
+                                        <td class="p-4 font-mono whitespace-nowrap">Temas 5 a 9</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300">Arquitectura de computadores, CPU, memoria, periféricos, estructuras de datos, SO y BBDD</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300"><span class="font-bold text-amber-600 dark:text-amber-400">Alto:</span> Base teórica imprescindible de la que derivan numerosas preguntas directas de definiciones.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                                        <td class="p-4 font-bold text-purple-600 dark:text-purple-400">Bloque III: Desarrollo y Servicios TI</td>
+                                        <td class="p-4 font-mono whitespace-nowrap">Temas 10 a 21</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300">Modelado, SQL, POO, tecnologías web, ITIL, soporte al puesto de trabajo y ofimática</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300"><span class="font-bold text-rose-600 dark:text-rose-400">Muy Alto:</span> Abarca 12 temas; concentra la mayor parte de las preguntas prácticas y de soporte hospitalario.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                                        <td class="p-4 font-bold text-amber-600 dark:text-amber-400">Bloque IV: Sistemas y Comunicaciones</td>
+                                        <td class="p-4 font-mono whitespace-nowrap">Temas 22 a 31</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300">Redes, modelo OSI, TCP/IP, seguridad perimetral, administración de servidores y CPD</td>
+                                        <td class="p-4 text-slate-700 dark:text-slate-300"><span class="font-bold text-rose-600 dark:text-rose-400">Muy Alto:</span> Núcleo crítico de infraestructura de comunicaciones de las Áreas de Salud del SMS.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Secuencia Pedagógica Recomendada -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
+                                Secuencia Pedagógica Recomendada
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 rounded-xl border-l-4 border-cyan-500 bg-cyan-500/5 dark:bg-cyan-500/10">
+                                    <p class="text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+                                        <strong>1. Fase 1 — Administración Electrónica y Marco Digital (Temas 1 al 4):</strong> Asimilar de forma prioritaria el Real Decreto 311/2022 (ENS), el RGPD/LOPDGDD y los estándares sanitarios específicos (HL7 y DICOM), aprovechando la base normativa ya consolidada en la Parte General.
+                                    </p>
+                                </div>
+                                <div class="p-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-500/5 dark:bg-emerald-500/10">
+                                    <p class="text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+                                        <strong>2. Fase 2 — Tecnología Básica y Sistemas Operativos (Temas 5 al 9):</strong> Afianzar la arquitectura funcional de ordenadores, los niveles de memoria y la gestión de procesos y almacenamiento en entornos Windows y Linux.
+                                    </p>
+                                </div>
+                                <div class="p-4 rounded-xl border-l-4 border-amber-500 bg-amber-500/5 dark:bg-amber-500/10">
+                                    <p class="text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+                                        <strong>3. Fase 3 — Infraestructura, Redes y Comunicaciones (Temas 26 al 31, y Temas 22 al 25):</strong> Dominar la pila TCP/IP, el modelo OSI, el direccionamiento IP/subredes, el cableado estructurado y la seguridad perimetral (cortafuegos y VPN).
+                                    </p>
+                                </div>
+                                <div class="p-4 rounded-xl border-l-4 border-purple-500 bg-purple-500/5 dark:bg-purple-500/10">
+                                    <p class="text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+                                        <strong>4. Fase 4 — Datos, Desarrollo, ITIL y Puesto de Usuario (Temas 10 al 21):</strong> Consolidar el diseño relacional, el lenguaje SQL, las buenas prácticas de Service Desk según ITIL y las herramientas de gestión del puesto de trabajo corporativo.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="pt-2">
+                                <button onclick="switchMainView('pedagogica')" class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs sm:text-sm font-bold shadow">
+                                    ⚡ Estudiar siguiendo esta Secuencia Pedagógica (Fase 1 → 2 → 3 → 4)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: INTERACTIVE NEURAL BRAIN & QUICK JUMP -->
+            <aside id="brain-column" class="w-full xl:w-5/12 xl:sticky xl:top-20 space-y-4 no-print">
+                <div class="brain-canvas-wrapper rounded-2xl border border-slate-800 p-4 shadow-2xl text-slate-100 relative overflow-hidden">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3 border-b border-slate-800 pb-2.5">
+                        <div>
+                            <h3 class="text-sm font-bold font-mono uppercase tracking-wider text-cyan-400 flex items-center gap-2">
+                                <span>🧠 Red Sináptica de los 31 Temas</span>
+                            </h3>
+                            <p class="text-[11px] text-slate-400">
+                                Haz clic en cualquier neurona para ir al tema. Los temas en estado <strong>"Dominado"</strong> o <strong>"Repaso"</strong> disparan impulsos eléctricos cada segundo (1 Hz).
+                            </p>
+                        </div>
+                        <span id="active-neurons-badge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-800 text-emerald-400 border border-slate-700">
+                            0 / 31 Activas
+                        </span>
+                    </div>
+
+                    <!-- Responsive Canvas Container -->
+                    <div class="relative w-full flex justify-center items-center">
+                        <canvas id="brainCanvas" width="760" height="620" class="w-full h-auto max-h-[540px] cursor-pointer"></canvas>
+                        <!-- Floating Tooltip on Hover -->
+                        <div id="canvas-tooltip" class="pointer-events-none hidden absolute z-20 bg-slate-900/95 border border-slate-700 text-white p-2.5 rounded-xl shadow-xl text-xs max-w-xs"></div>
+                    </div>
+
+                    <!-- Quadrant Legend -->
+                    <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-800/80 text-[11px] text-slate-300">
+                        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span><span><strong>Fase 1 / Bloque I:</strong> Temas 1 a 4</span></div>
+                        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span><span><strong>Fase 2 / Bloque II:</strong> Temas 5 a 9</span></div>
+                        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span><span><strong>Fase 3 / Bloque IV:</strong> Temas 26-31, 22-25</span></div>
+                        <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span><span><strong>Fase 4 / Bloque III:</strong> Temas 10 a 21</span></div>
+                    </div>
+                </div>
+
+                <!-- Quick Navigation Grid 1..31 -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Acceso Rápido (31 Temas)</span>
+                        <span class="text-[11px] text-slate-400">Clic para saltar al tema</span>
+                    </div>
+                    <div id="quick-nav-grid" class="grid grid-cols-8 sm:grid-cols-11 xl:grid-cols-8 gap-1.5"></div>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <script>
+        // ============================================================================
+        // VERBATIM SYLLABUS DATA (ALL 31 TOPICS & 4 OFFICIAL BLOCKS + PEDAGOGICAL PHASES)
+        // ============================================================================
+        const blocksMetadata = [
+            {
+                id: 1,
+                headerTitle: "3. Parte Específica — Bloque I: Administración Electrónica (Temas 1 al 4)",
+                description: "El Bloque I constituye la pasarela técnico-jurídica del programa. Regula la relación digital entre el administrado y los servicios de salud, los marcos de seguridad y los estándares de intercambio clínico.",
+                color: "#06b6d4",
+                badgeClass: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/30",
+                borderClass: "border-cyan-500",
+                summaries: [
+                    "Tema 1: Acceso Electrónico, Procedimiento Administrativo, ENS y ENI.",
+                    "Tema 2: Protección de Datos Personales (RGPD y LOPDGDD 3/2018).",
+                    "Tema 3: Historia Clínica Electrónica y Estándares Aplicables.",
+                    "Tema 4: Interoperabilidad Sanitaria y Mensajería (HL7 / DICOM)."
+                ],
+                topicNums: [1, 2, 3, 4]
+            },
+            {
+                id: 2,
+                headerTitle: "4. Parte Específica — Bloque II: Tecnología Básica (Temas 5 al 9)",
+                description: "El Bloque II evalúa los fundamentos teóricos del hardware, los sistemas operativos y la gestión de bases de datos, constituyendo el soporte sobre el que descansan las infraestructuras sanitarias.",
+                color: "#10b981",
+                badgeClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
+                borderClass: "border-emerald-500",
+                summaries: [
+                    "Tema 5: Informática Básica, Arquitectura de Ordenadores, CPU y Memoria.",
+                    "Tema 6: Periféricos, Almacenamiento y Digitalización.",
+                    "Tema 7: Tipos Abstractos, Estructuras de Datos y Algoritmos.",
+                    "Tema 8: Sistemas Operativos (Windows, Unix/Linux y Móviles).",
+                    "Tema 9: SGBD Relacionales y Orientados a Objetos."
+                ],
+                topicNums: [5, 6, 7, 8, 9]
+            },
+            {
+                id: 3,
+                headerTitle: "5. Parte Específica — Bloque III: Desarrollo de Sistemas y Servicios TI (Temas 10 al 21)",
+                description: "El Bloque III comprende la ingeniería del software, los lenguajes de desarrollo, las arquitecturas de aplicaciones web y las metodologías de gestión del servicio y soporte al puesto de trabajo.",
+                color: "#a855f7",
+                badgeClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/30",
+                borderClass: "border-purple-500",
+                summaries: [
+                    "Tema 10: Modelado Conceptual de Datos y DFD.",
+                    "Tema 11: Diseño Lógico/Físico de BBDD y Normalización.",
+                    "Tema 12: Fundamentos de Algoritmos y Lenguajes.",
+                    "Tema 13: Lenguaje ANSI SQL.",
+                    "Tema 14: POO, Patrones de Diseño y UML.",
+                    "Tema 15: Entornos Java, C, C++ y .NET.",
+                    "Tema 16: Arquitectura Cliente/Servidor y Servicios Web.",
+                    "Tema 17: Aplicaciones Web (JS, Servlets, HTML, XML).",
+                    "Tema 18: Accesibilidad (WAI/WCAG) y Usabilidad.",
+                    "Tema 19: Gestión de Servicios TI (ITIL: Incidencias y Problemas).",
+                    "Tema 20: Configuración y Securización del Puesto de Trabajo.",
+                    "Tema 21: Herramientas Ofimáticas en la Administración Regional."
+                ],
+                topicNums: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+            },
+            {
+                id: 4,
+                headerTitle: "6. Parte Específica — Bloque IV: Sistemas y Comunicaciones (Temas 22 al 31)",
+                description: "El Bloque IV aborda la administración avanzada de sistemas operativos de servidor, los centros de proceso de datos (CPD), la infraestructura de red corporativa y la seguridad en comunicaciones.",
+                color: "#f59e0b",
+                badgeClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30",
+                borderClass: "border-amber-500",
+                summaries: [
+                    "Tema 22: Administración del SO, Software de Base y Control de Cambios.",
+                    "Tema 23: Administración de BBDD y Servidores de Correo (SMTP, IMAP, POP3).",
+                    "Tema 24: Administración de LAN, Gestión de Usuarios y Monitorización.",
+                    "Tema 25: Seguridad de Sistemas, Amenazas, CPD y Control Remoto.",
+                    "Tema 26: Medios de Transmisión, Modos y Equipos de Interconexión.",
+                    "Tema 27: Redes de Conmutación/Difusión, Comunicaciones Móviles y Wi-Fi.",
+                    "Tema 28: Modelo de Referencia OSI y Protocolos TCP/IP.",
+                    "Tema 29: Arquitectura de Internet, Servicios Web y Protocolos Seguros.",
+                    "Tema 30: Seguridad Perimetral, Cortafuegos y Redes Privadas Virtuales (VPN).",
+                    "Tema 31: Redes Locales, Tipología, Métodos de Acceso y Cableado."
+                ],
+                topicNums: [22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+            }
+        ];
+
+        const pedagogicalPhases = [
+            {
+                id: 1,
+                headerTitle: "1. Fase 1 — Administración Electrónica y Marco Digital (Temas 1 al 4)",
+                description: "Asimilar de forma prioritaria el Real Decreto 311/2022 (ENS), el RGPD/LOPDGDD y los estándares sanitarios específicos (HL7 y DICOM), aprovechando la base normativa ya consolidada en la Parte General.",
+                color: "#06b6d4",
+                borderClass: "border-cyan-500",
+                topicNums: [1, 2, 3, 4]
+            },
+            {
+                id: 2,
+                headerTitle: "2. Fase 2 — Tecnología Básica y Sistemas Operativos (Temas 5 al 9)",
+                description: "Afianzar la arquitectura funcional de ordenadores, los niveles de memoria y la gestión de procesos y almacenamiento en entornos Windows y Linux.",
+                color: "#10b981",
+                borderClass: "border-emerald-500",
+                topicNums: [5, 6, 7, 8, 9]
+            },
+            {
+                id: 3,
+                headerTitle: "3. Fase 3 — Infraestructura, Redes y Comunicaciones (Temas 26 al 31, y Temas 22 al 25)",
+                description: "Dominar la pila TCP/IP, el modelo OSI, el direccionamiento IP/subredes, el cableado estructurado y la seguridad perimetral (cortafuegos y VPN).",
+                color: "#f59e0b",
+                borderClass: "border-amber-500",
+                topicNums: [26, 27, 28, 29, 30, 31, 22, 23, 24, 25]
+            },
+            {
+                id: 4,
+                headerTitle: "4. Fase 4 — Datos, Desarrollo, ITIL y Puesto de Usuario (Temas 10 al 21)",
+                description: "Consolidar el diseño relacional, el lenguaje SQL, las buenas prácticas de Service Desk según ITIL y las herramientas de gestión del puesto de trabajo corporativo.",
+                color: "#a855f7",
+                borderClass: "border-purple-500",
+                topicNums: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+            }
+        ];
+
+        const topicsData = [
+            {
+                num: 1,
+                bloque: 1,
+                fase: 1,
+                shortSummary: "Tema 1: Acceso Electrónico, Procedimiento Administrativo, ENS y ENI.",
+                title: "Tema 1: Acceso Electrónico, Procedimiento Administrativo, ENS y ENI",
+                enunciado: "Acceso electrónico de los ciudadanos a los servicios públicos y normativa de desarrollo. La gestión electrónica de los procedimientos administrativos: registros, notificaciones y uso de medios electrónicos. Esquema Nacional de Seguridad y de Interoperabilidad.",
+                criticos: "Ley 39/2015 del Procedimiento Administrativo Común (sede electrónica, identificación y firma, registro electrónico de apoderamientos y notificaciones telemáticas). El Esquema Nacional de Seguridad (ENS) actualizado por el Real Decreto 311/2022: principios básicos, requisitos mínimos, las 5 dimensiones de seguridad (Disponibilidad, Autenticidad, Integridad, Confidencialidad y Trazabilidad) y las 3 categorías de sistemas (Básica, Media y Alta). El Esquema Nacional de Interoperabilidad (ENI) regulado por el Real Decreto 4/2010 y sus Normas Técnicas de Interoperabilidad (NTI) sobre documento electrónico, expediente electrónico y digitalización de documentos.",
+                x: 280, y: 150
+            },
+            {
+                num: 2,
+                bloque: 1,
+                fase: 1,
+                shortSummary: "Tema 2: Protección de Datos Personales (RGPD y LOPDGDD 3/2018).",
+                title: "Tema 2: Protección de Datos Personales en el Ámbito Sanitario",
+                enunciado: "La protección de datos personales y su normativa reguladora. Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y de garantía de los derechos digitales. El Reglamento General de Protección de Datos (Reglamento (UE) 2016/679, de 27 de abril). La Agencia de Protección de Datos: competencias y funciones.",
+                criticos: "Principios del tratamiento (licitud, lealtad, transparencia, limitación de la finalidad, minimización, exactitud, limitación del plazo de conservación, integridad y confidencialidad). Tratamiento de categorías especiales de datos (datos de salud, artículo 9 RGPD y Disposición Adicional Decimoséptima de la LOPDGDD). Derechos de los interesados (acceso, rectificación, supresión, oposición, limitación y portabilidad). Régimen del Responsable y del Encargado del Tratamiento. La figura del Delegado de Protección de Datos (DPD) en entidades sanitarias. Régimen sancionador e infracciones (leves, graves y muy graves).",
+                x: 215, y: 195
+            },
+            {
+                num: 3,
+                bloque: 1,
+                fase: 1,
+                shortSummary: "Tema 3: Historia Clínica Electrónica y Estándares Aplicables.",
+                title: "Tema 3: Historia Clínica Electrónica (HCE) y Estándares Aplicables",
+                enunciado: "La historia clínica electrónica. Estándares aplicables.",
+                criticos: "Ley 41/2002, reguladora de la autonomía del paciente y de derechos y obligaciones en materia de información y documentación clínica (definición, contenido mínimo, custodia y conservación de la historia clínica). Arquitectura del proyecto Historia Clínica Digital del Sistema Nacional de Salud (HCDSNS). Modelos de documentos clínicos estandarizados (informe de alta, urgencias, consulta externa, pruebas de laboratorio e imagen). Conjunto Mínimo Básico de Datos (CMBD).",
+                x: 310, y: 225
+            },
+            {
+                num: 4,
+                bloque: 1,
+                fase: 1,
+                shortSummary: "Tema 4: Interoperabilidad Sanitaria y Mensajería (HL7 / DICOM).",
+                title: "Tema 4: Interoperabilidad en el Ámbito Sanitario",
+                enunciado: "Interoperabilidad en ámbito sanitario. Mensajería y estándares.",
+                criticos: "Niveles de interoperabilidad (técnica, semántica y organizativa). Estándares de mensajería sanitaria: familia HL7 (Health Level Seven), diferenciación entre HL7 v2.x (mensajería delimitada por caracteres), HL7 v3 (basada en el modelo RIM y XML) y HL7 CDA (Clinical Document Architecture). El estándar FHIR (Fast Healthcare Interoperability Resources) basado en recursos RESTful y formatos JSON/XML. Estándar DICOM (Digital Imaging and Communication in Medicine) para imágenes médicas y servidores PACS. Terminologías clínicas y ontologías: SNOMED CT, CIE-10 (Clasificación Internacional de Enfermedades) y LOINC para laboratorio.",
+                x: 225, y: 265
+            },
+            {
+                num: 5,
+                bloque: 2,
+                fase: 2,
+                shortSummary: "Tema 5: Informática Básica, Arquitectura de Ordenadores, CPU y Memoria.",
+                title: "Tema 5: Informática Básica, Arquitectura de Ordenadores, CPU y Memoria",
+                enunciado: "Informática básica. Conceptos de datos e información. Concepto de sistema de información. Elementos constitutivos de un sistema de información. Características y funciones. Arquitectura de ordenadores. Elementos básicos. Funciones. La unidad central de proceso. La memoria: tipos, jerarquía y modos de direccionamiento.",
+                criticos: "Arquitectura Von Neumann vs. Harvard. Componentes de la CPU: Unidad de Control (Contador de Programa y Registro de Instrucción) y Unidad Aritmético-Lógica (ALU, acumulador y registro de estado). Jerarquía de memoria (registros, caché L1/L2/L3, RAM, memoria secundaria). Memoria SRAM (biestables, sin refresco, rápida) vs. DRAM (condensadores, requiere refresco periódico). Modos de direccionamiento (inmediato, directo, indirecto, relativo, indexado). Buses del sistema: bus de datos (bidireccional), bus de direcciones (unidireccional) y bus de control.",
+                x: 455, y: 145
+            },
+            {
+                num: 6,
+                bloque: 2,
+                fase: 2,
+                shortSummary: "Tema 6: Periféricos, Almacenamiento y Digitalización.",
+                title: "Tema 6: Periféricos y Almacenamiento",
+                enunciado: "Periféricos: conectividad y administración. Elementos de impresión. Elementos de almacenamiento. Elementos de visualización y digitalización.",
+                criticos: "Clasificación de dispositivos E/S (bloque y carácter). Interfaces de conexión física: USB (versiones y tasas de transferencia), PCIe, SATA, SAS, Thunderbolt. Tecnologías de discos duros magnéticos (HDD) frente a unidades de estado sólido (SSD: SATA, NVMe M.2). Sistemas de digitalización de documentos (resolución óptica, escáneres documentales, OCR y requisitos de la NTI de digitalización). Dispositivos de visualización y monitores de diagnóstico clínico.",
+                x: 535, y: 175
+            },
+            {
+                num: 7,
+                bloque: 2,
+                fase: 2,
+                shortSummary: "Tema 7: Tipos Abstractos, Estructuras de Datos y Algoritmos.",
+                title: "Tema 7: Estructuras de Datos, Ficheros y Algoritmos",
+                enunciado: "Tipos abstractos y Estructuras de datos. Organizaciones de ficheros. Algoritmos. Formatos de información y ficheros.",
+                criticos: "Tipos abstractos de datos (TAD): listas, pilas (LIFO), colas (FIFO), árboles (binarios, AVL, B-Tree) y grafos. Métodos de ordenación y búsqueda (búsqueda lineal, binaria, hashing). Complejidad algorítmica y notación asintótica Big-O. Organización física y lógica de ficheros (secuencial, relativa, indexada o VSAM). Formatos estructurados y de intercambio: texto plano, CSV, JSON, XML y formatos de compresión.",
+                x: 440, y: 210
+            },
+            {
+                num: 8,
+                bloque: 2,
+                fase: 2,
+                shortSummary: "Tema 8: Sistemas Operativos (Windows, Unix/Linux y Móviles).",
+                title: "Tema 8: Sistemas Operativos",
+                enunciado: "Sistemas operativos. Características y elementos constitutivos. Sistemas Windows. Sistemas Unix y Linux. Sistemas operativos para dispositivos móviles.",
+                criticos: "Estructura del sistema operativo: núcleo o kernel (monolítico, microkernel, híbrido), llamadas al sistema (syscalls), gestión de procesos, planificación de CPU (FIFO, Round Robin, por prioridades), gestión de memoria virtual y paginación. Administración de sistemas Windows (Windows Server, PowerShell, registro de Windows, gestión de servicios). Sistemas Unix y Linux (jerarquía del sistema de archivos FHS, permisos rwx/chmod/chown, gestión de paquetes, comandos básicos de shell). Sistemas operativos móviles: Android e iOS, gestión de permisos y perfiles MDM.",
+                x: 550, y: 235
+            },
+            {
+                num: 9,
+                bloque: 2,
+                fase: 2,
+                shortSummary: "Tema 9: SGBD Relacionales y Orientados a Objetos.",
+                title: "Tema 9: Sistemas de Gestión de Bases de Datos",
+                enunciado: "Sistemas de gestión de bases de datos relacionales. Características y componentes. Sistemas de gestión de bases de datos orientados a objetos.",
+                criticos: "Objetivos y arquitectura de tres niveles ANSI/SPARC (nivel interno, conceptual y externo). Independencia física y lógica de datos. El motor de base de datos relacional: diccionario de datos, optimizador de consultas, gestor de transacciones y control de concurrencia (bloqueos y aislamiento ACID). Bases de datos orientadas a objetos (OODBMS) y sistemas objeto-relacionales (ORDBMS).",
+                x: 470, y: 270
+            },
+            {
+                num: 10,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 10: Modelado Conceptual de Datos y DFD.",
+                title: "Tema 10: Modelado Conceptual de Datos y Diagramas de Flujo de Datos",
+                enunciado: "Modelo conceptual de datos. Entidades, atributos y relaciones. Reglas de modelización. Diagramas de flujo de datos. Reglas de construcción. Descomposición en niveles. Flujogramas.",
+                criticos: "Modelo Entidad-Relación (E/R de Chen): entidades fuertes y débiles, tipos de atributos, cardinalidades (1:1, 1:N, N:M). Diagramas de Flujo de Datos (DFD): entidades externas, procesos, almacenes de datos y flujos de datos. Reglas de conservación de datos y descomposición funcional en niveles (diagrama de contexto o nivel 0, nivel 1, etc.).",
+                x: 430, y: 335
+            },
+            {
+                num: 11,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 11: Diseño Lógico/Físico de BBDD y Normalización.",
+                title: "Tema 11: Diseño de Bases de Datos y Normalización",
+                enunciado: "Diseño de bases de datos. Diseño lógico y físico. El modelo lógico relacional. Normalización.",
+                criticos: "Transformación del modelo E/R al modelo relacional (tablas, claves primarias, claves foráneas). Reglas de integridad (integridad de entidad e integridad referencial). Proceso de normalización de bases de datos: Primera Forma Normal (1FN - atomicidad de atributos), Segunda Forma Normal (2FN - dependencia funcional completa respecto a la clave) y Tercera Forma Normal (3FN - ausencia de dependencias transitivas). Forma Normal de Boyce-Codd (FNBC).",
+                x: 505, y: 330
+            },
+            {
+                num: 12,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 12: Fundamentos de Algoritmos y Lenguajes.",
+                title: "Tema 12: Fundamentos de Lenguajes de Programación",
+                enunciado: "Lenguajes de programación. Representación de tipos de datos. Operadores. Instrucciones condicionales. Bucles y recursividad. Procedimientos, funciones y parámetros. Vectores y registros. Estructura de un programa.",
+                criticos: "Paradigmas de programación (imperativo, procedimental, funcional). Tipos de datos primitivos y compuestos. Estructuras de control de flujo (selección e iteración). Mecanismos de paso de parámetros: paso por valor vs. paso por referencia. Pila de llamadas (call stack) y gestión de la recursividad.",
+                x: 580, y: 345
+            },
+            {
+                num: 13,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 13: Lenguaje ANSI SQL.",
+                title: "Tema 13: Lenguaje de Interrogación de Bases de Datos (ANSI SQL)",
+                enunciado: "Lenguajes de interrogación de bases de datos. Estándar ANSI SQL.",
+                criticos: "Lenguaje de Definición de Datos (DDL: CREATE, ALTER, DROP). Lenguaje de Manipulación de Datos (DML: SELECT, INSERT, UPDATE, DELETE). Consultas multicapa y tipos de combinación (INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN). Funciones de agregación (COUNT, SUM, AVG, MIN, MAX) y cláusulas GROUP BY y HAVING. Lenguaje de Control de Datos (DCL: GRANT, REVOKE) y de Control Transaccional (TCL: COMMIT, ROLLBACK, SAVEPOINT).",
+                x: 440, y: 390
+            },
+            {
+                num: 14,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 14: POO, Patrones de Diseño y UML.",
+                title: "Tema 14: Programación Orientada a Objetos, Patrones y UML",
+                enunciado: "Diseño y programación orientada a objetos. Elementos y componentes software: objetos, clases, herencia, métodos, sobrecarga. Ventajas e inconvenientes. Patrones de diseño y lenguaje de modelado unificado (UML).",
+                criticos: "Pilares de la POO: encapsulamiento, abstracción, herencia y polimorfismo. Sobrecarga de métodos frente a sobreescritura (overriding). Patrones de diseño clásicos (GoF): creacionales (Singleton, Factory Method), estructurales (Adapter, Composite) y de comportamiento (Observer, Strategy). Diagramas UML estructurales (diagrama de clases, objetos, componentes) y de comportamiento (casos de uso, secuencia, actividades, estados).",
+                x: 515, y: 385
+            },
+            {
+                num: 15,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 15: Entornos Java, C, C++ y .NET.",
+                title: "Tema 15: Entornos de Desarrollo: Java, C, C++ y .NET",
+                enunciado: "Lenguajes de programación. Características, elementos y funciones en entornos Java, C, y C++ y .Net.",
+                criticos: "Plataforma Java: compilación a bytecode, máquina virtual (JVM), JDK vs. JRE, recolección de basura (Garbage Collector). Lenguajes C y C++: gestión manual de memoria, punteros, compilación nativa y bibliotecas estándar. Ecosistema Microsoft .NET: Common Language Runtime (CLR), Common Intermediate Language (CIL), lenguajes C# y VB.NET.",
+                x: 595, y: 400
+            },
+            {
+                num: 16,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 16: Arquitectura Cliente/Servidor y Servicios Web.",
+                title: "Tema 16: Arquitectura Cliente/Servidor y Servicios Web",
+                enunciado: "Arquitectura cliente/servidor. Modelo de 2 capas. Modelo de 3 capas. Componentes y operación. Arquitecturas de servicios web (WS).",
+                criticos: "Evolución arquitectónica: cliente pesado (2 capas) frente a cliente ligero (3 capas: presentación, lógica de negocio y datos). Servidores web frente a servidores de aplicaciones. Arquitecturas de Servicios Web: SOAP (protocolo XML, contratos WSDL, estándares WS-Security) frente a arquitecturas RESTful (sin estado, URIs semánticas, métodos HTTP GET, POST, PUT, DELETE, y representación JSON).",
+                x: 430, y: 445
+            },
+            {
+                num: 17,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 17: Aplicaciones Web (JS, Servlets, HTML, XML).",
+                title: "Tema 17: Aplicaciones Web y Tecnologías de Programación",
+                enunciado: "Aplicaciones Web. Tecnologías de programación. JavaScript, applets, servlets, y servicios web. Lenguajes de descripción de datos: HTML, XML y sus derivaciones. Navegadores y lenguajes de programación web. Lenguajes de script.",
+                criticos: "Estructura del DOM (Document Object Model). Lenguajes de marcado: HTML5 (etiquetas semánticas, formularios, <canvas>) y XML (validación mediante DTD y XML Schema - XSD, transformación XSLT). Tecnologías frontend: JavaScript moderno, peticiones asíncronas (AJAX, Fetch API). Tecnologías backend: servlets Java, JSP, PHP y lenguajes de script para automatización (Python, Bash, PowerShell).",
+                x: 510, y: 440
+            },
+            {
+                num: 18,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 18: Accesibilidad (WAI/WCAG) y Usabilidad.",
+                title: "Tema 18: Accesibilidad, Diseño Universal y Usabilidad",
+                enunciado: "Accesibilidad, diseño universal y usabilidad. Acceso y usabilidad de las tecnologías, productos y servicios relacionados con la sociedad de la información. Confidencialidad y disponibilidad de la información en puestos de usuario final.",
+                criticos: "Real Decreto 1112/2018 sobre accesibilidad de los sitios web y aplicaciones para dispositivos móviles del sector público. Iniciativa de Accesibilidad Web (WAI) y pautas de accesibilidad WCAG 2.1: los 4 principios fundamentales (Perceptible, Operable, Comprensible y Robusto) y niveles de conformidad (A, AA y AAA). Medidas de protección y confidencialidad en pantallas y puestos clínicos de atención directa al público.",
+                x: 585, y: 455
+            },
+            {
+                num: 19,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 19: Gestión de Servicios TI (ITIL: Incidencias y Problemas).",
+                title: "Tema 19: Gestión de Servicios TI (Buenas Prácticas ITIL)",
+                enunciado: "Gestión de servicios de tecnologías de la información. El centro de servicios. Gestión de Incidencias. Gestión de problemas.",
+                criticos: "Marcos de referencia ITIL v3 e ITIL 4. Función del Centro de Servicios al Usuario (Service Desk / Helpdesk): punto único de contacto (SPOC). Gestión de Incidencias: restauración rápida del servicio normal, soluciones temporales (workarounds) y escalado. Gestión de Problemas: análisis de causa raíz (RCA), registro de errores conocidos (KEDB) y prevención de incidencias recurrentes. Acuerdos de Nivel de Servicio (SLA, OLA y UC).",
+                x: 445, y: 500
+            },
+            {
+                num: 20,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 20: Configuración y Securización del Puesto de Trabajo.",
+                title: "Tema 20: Configuración, Securización y Soporte del Puesto de Trabajo",
+                enunciado: "El puesto de trabajo. Configuración. Securización. Acceso y soporte remoto.",
+                criticos: "Despliegue y clonación de imágenes corporativas (herramientas Sysprep, WIM, PXE). Aplicación de directivas de grupo (GPO en Directorio Activo). Securización del endpoint: software antivirus/EDR, control de puertos USB, cifrado de volumen (BitLocker), cortafuegos local y actualización automatizada de parches (WSUS). Protocolos de acceso y soporte remoto (RDP, VNC, SSH) y herramientas corporativas de asistencia técnica.",
+                x: 520, y: 495
+            },
+            {
+                num: 21,
+                bloque: 3,
+                fase: 4,
+                shortSummary: "Tema 21: Herramientas Ofimáticas en la Administración Regional.",
+                title: "Tema 21: Herramientas Ofimáticas en la Administración Sanitaria",
+                enunciado: "Principales herramientas ofimáticas en el entorno de la Administración Sanitaria Regional.",
+                criticos: "Suites ofimáticas corporativas (Microsoft Office / Microsoft 365 y LibreOffice). Procesadores de texto: combinación de correspondencia, estilos, plantillas y exportación a PDF/A. Hojas de cálculo: fórmulas avanzadas, referencias absolutas y relativas, funciones lógicas y de búsqueda (BUSCARV/VLOOKUP, INDICE, COINCIDIR), tablas dinámicas y análisis de datos de gestión hospitalaria. Gestores de correo y agenda corporativa (Outlook, Exchange y webmail regional).",
+                x: 575, y: 520
+            },
+            {
+                num: 22,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 22: Administración del SO, Software de Base y Control de Cambios.",
+                title: "Tema 22: Administración de Sistemas Operativos y Control de Cambios",
+                enunciado: "Administración del Sistema operativo y software de base. Funciones y responsabilidades. Control de cambios de los programas de una instalación.",
+                criticos: "Tareas del administrador de sistemas: monitorización del rendimiento, gestión del almacenamiento lógico (LVM), automatización mediante scripts y gestión de parches. Virtualización de servidores (hipervisores Tipo 1 / Bare-Metal como VMware ESXi o KVM frente a Tipo 2). Contenedores ligeros (Docker) y orquestación. Gestión del Control de Cambios (RFCs, comité de cambios CAB en ITIL) y sistemas de control de versiones.",
+                x: 195, y: 445
+            },
+            {
+                num: 23,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 23: Administración de BBDD y Servidores de Correo (SMTP, IMAP, POP3).",
+                title: "Tema 23: Administración de Bases de Datos y Servidores de Correo",
+                enunciado: "Administración de bases de datos. Funciones y responsabilidades. Administración de servidores de correo electrónico. Protocolos de correo electrónico.",
+                criticos: "Tareas del Administrador de Bases de Datos (DBA): políticas de copia de seguridad (backup completo, diferencial, transaccional), recuperación ante desastres (RPO y RTO), monitorización de bloqueos y optimización de índices. Protocolos de correo electrónico: SMTP (puerto 25, 587 con STARTTLS) para transferencia entre servidores y envío de clientes; POP3 (puerto 110, 995 seguro) para descarga local; IMAP4 (puerto 143, 993 seguro) para sincronización de carpetas en servidor. Mecanismos de seguridad del correo: SPF, DKIM y DMARC.",
+                x: 270, y: 445
+            },
+            {
+                num: 24,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 24: Administración de LAN, Gestión de Usuarios y Monitorización.",
+                title: "Tema 24: Administración de Redes Locales y Control de Tráfico",
+                enunciado: "Administración de redes de área local. Gestión de usuarios. Gestión de dispositivos. Monitorización y control de tráfico.",
+                criticos: "Servicios de directorio corporativo: Active Directory (bosques, dominios, unidades organizativas, catálogo global) y protocolo LDAP (campos DN, CN, OU, DC). Protocolos de asignación dinámica de configuración: DHCP (proceso DORA: Discover, Offer, Request, Acknowledge). Protocolos de monitorización de red: SNMP (v1, v2c y v3 con cifrado y autenticación, MIBs, traps) y herramientas de supervisión (Nagios, Zabbix). Analizadores de tráfico y captura de paquetes (Wireshark).",
+                x: 335, y: 455
+            },
+            {
+                num: 25,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 25: Seguridad de Sistemas, Amenazas, CPD y Control Remoto.",
+                title: "Tema 25: Seguridad de Sistemas, Infraestructura de CPD y Gestión de Incidencias",
+                enunciado: "Conceptos de seguridad de los sistemas de información. Seguridad física. Seguridad lógica. Amenazas y vulnerabilidades. Infraestructura física de un CPD: acondicionamiento y equipamiento. Sistemas de gestión de incidencias. Control remoto de puestos de usuario.",
+                criticos: "Seguridad física: control de accesos, protección contra incendios (gases inertes), climatización (pasillo frío / pasillo caliente) y sistemas de alimentación ininterrumpida (SAI/UPS y grupos electrógenos). Clasificación Tier del Uptime Institute para CPDs (Tier I a Tier IV según redundancia y disponibilidad). Seguridad lógica: principio de mínimo privilegio, autenticación multifactor (MFA). Tipología de amenazas (malware, ransomware, phishing, ataques DDoS). Organismos de referencia en ciberseguridad pública: CCN-CERT e INCIBE.",
+                x: 265, y: 505
+            },
+            {
+                num: 26,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 26: Medios de Transmisión, Modos y Equipos de Interconexión.",
+                title: "Tema 26: Medios de Transmisión y Equipos de Interconexión",
+                enunciado: "Comunicaciones. Medios de transmisión. Modos de comunicación. Equipos terminales y equipos de interconexión y conmutación.",
+                criticos: "Medios guiados: par trenzado (categorías Cat 5e, Cat 6, Cat 6A, Cat 7; UTP, FTP, STP) y fibra óptica (monomodo para largas distancias frente a multimodo 50/125 y 62.5/125 para campus/edificio). Medios no guiados: radioenlaces y microondas. Modos de transmisión: simplex, half-duplex y full-duplex. Equipos de interconexión física y de enlace: repetidores, concentradores (hubs), puentes (bridges), conmutadores (switches) y pasarelas (gateways).",
+                x: 195, y: 335
+            },
+            {
+                num: 27,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 27: Redes de Conmutación/Difusión, Comunicaciones Móviles y Wi-Fi.",
+                title: "Tema 27: Redes de Comunicaciones, Redes Inalámbricas y Móviles",
+                enunciado: "Redes de Comunicaciones. Redes de Conmutación y Redes de Difusión. Comunicaciones móviles y redes inalámbricas.",
+                criticos: "Redes de conmutación de circuitos frente a conmutación de paquetes. Redes inalámbricas Wi-Fi (estándares IEEE 802.11a/b/g/n/ac/ax o Wi-Fi 6, bandas de 2,4 GHz, 5 GHz y 6 GHz). Seguridad Wi-Fi: protocolos WEP (obsoleto), WPA2 (basado en AES/CCMP) y WPA3; modos Personal (PSK) y Enterprise (autenticación 802.1X con servidor RADIUS). Evolución de redes de comunicaciones móviles celulares: 4G (LTE) y 5G (baja latencia y conectividad masiva para IoT médico).",
+                x: 265, y: 330
+            },
+            {
+                num: 28,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 28: Modelo de Referencia OSI y Protocolos TCP/IP.",
+                title: "Tema 28: Modelo de Referencia OSI y Pila de Protocolos TCP/IP",
+                enunciado: "El modelo de referencia de interconexión de sistemas abiertos (OSI) de ISO. Protocolos TCP/IP.",
+                criticos: "Las 7 capas del Modelo OSI (Física, Enlace de datos, Red, Transporte, Sesión, Presentación y Aplicación) y sus unidades de datos de protocolo (PDU: bits, tramas, paquetes, segmentos y datos). Comparativa funcional con las 4/5 capas de la Pila TCP/IP. Protocolos del nivel de red: IPv4, IPv6 (estructura de 128 bits, notación hexadecimal, direcciones link-local fe80::/10), ICMP y ARP/RARP. Protocolos del nivel de transporte: TCP (orientado a conexión, fiable, control de flujo por ventana deslizante, three-way handshake) frente a UDP (no orientado a conexión, no fiable, baja sobrecarga, streaming y DNS).",
+                x: 335, y: 345
+            },
+            {
+                num: 29,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 29: Arquitectura de Internet, Servicios Web y Protocolos Seguros.",
+                title: "Tema 29: Arquitectura de Internet, Servicios y Protocolos Seguros",
+                enunciado: "Internet: arquitectura de red. Origen, evolución y estado actual. Servicios: correo electrónico, WWW, FTP, Telnet y otros. Protocolos HTTP, HTTPS y SSL/TLS.",
+                criticos: "Sistema de Nombres de Dominio (DNS): jerarquía de dominios (raíz, TLD, dominios de segundo nivel), registros DNS (A, AAAA, CNAME, MX, PTR, TXT, SOA), consultas recursivas e iterativas. Protocolo HTTP (versiones HTTP/1.1, HTTP/2, HTTP/3 con QUIC) y códigos de estado (2xx éxito, 3xx redirección, 4xx error cliente, 5xx error servidor). Criptografía y seguridad en web: cifrado simétrico (AES), asimétrico (RSA, curvas elípticas), funciones hash (SHA-256), certificados digitales X.509 y negociación del protocolo TLS.",
+                x: 185, y: 390
+            },
+            {
+                num: 30,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 30: Seguridad Perimetral, Cortafuegos y Redes Privadas Virtuales (VPN).",
+                title: "Tema 30: Seguridad y Protección en Redes, Cortafuegos y VPN",
+                enunciado: "Seguridad y protección en redes de comunicaciones. Sistemas de cortafuegos. Redes Privadas Virtuales (VPN). Seguridad en el puesto del usuario.",
+                criticos: "Tipologías de cortafuegos (firewalls): filtrado de paquetes sin estado, inspección de estado (stateful inspection), cortafuegos de aplicación/proxy y firewalls de nueva generación (NGFW con inspección profunda de paquetes e IPS). Arquitecturas de red segura: zonas desmilitarizadas (DMZ) y segmentación de redes. Redes Privadas Virtuales (VPN): protocolos IPsec (modos túnel y transporte, cabeceras AH y ESP) y VPN SSL/TLS (OpenVPN, WireGuard). Sistemas de detección y prevención de intrusos (IDS/IPS).",
+                x: 260, y: 390
+            },
+            {
+                num: 31,
+                bloque: 4,
+                fase: 3,
+                shortSummary: "Tema 31: Redes Locales, Tipología, Métodos de Acceso y Cableado.",
+                title: "Tema 31: Redes de Área Local, Métodos de Acceso e Interconexión",
+                enunciado: "Redes locales. Tipología. Métodos de acceso. Dispositivos de interconexión.",
+                criticos: "Topologías de red: estrella, bus, anillo, malla y árbol. Métodos de control de acceso al medio: contienda (CSMA/CD para redes Ethernet tradicionales, CSMA/CA para redes Wi-Fi) y paso de testigo. Estándar Ethernet (IEEE 802.3). Redes de Área Local Virtuales (VLAN, estándar IEEE 802.1Q): puertos de acceso y enlaces troncales (trunking). Conmutadores de nivel 2 frente a conmutadores multicapa (Layer 3 switches). Cableado estructurado: subsistemas (horizontal, vertical o backbone, sala de telecomunicaciones y sala de equipos) y límites normativos de distancia (máximo 90 metros de enlace horizontal permanente más 10 metros de latiguillos).",
+                x: 335, y: 400
+            }
+        ];
+
+        // ============================================================================
+        // STATE MANAGEMENT (LOCALSTORAGE)
+        // ============================================================================
+        const STORAGE_KEY = 'sms_tens_informatica_especifica_v3';
+        let currentMainView = 'temario'; // 'temario' | 'pedagogica' | 'matriz'
+        let state = loadState();
+
+        function getDefaultState() {
+            const topics = {};
+            topicsData.forEach(t => {
+                topics[t.num] = {
+                    status: 'Pendiente', // 'Pendiente' | 'En estudio' | 'Repaso' | 'Dominado'
+                    notes: '',
+                    checkedPoints: {}
+                };
+            });
+            return { topics };
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return getDefaultState();
+                const parsed = JSON.parse(raw);
+                const def = getDefaultState();
+                topicsData.forEach(t => {
+                    if (parsed.topics && parsed.topics[t.num]) {
+                        def.topics[t.num] = {
+                            status: parsed.topics[t.num].status || 'Pendiente',
+                            notes: parsed.topics[t.num].notes || '',
+                            checkedPoints: parsed.topics[t.num].checkedPoints || {}
+                        };
+                    }
+                });
+                return def;
+            } catch (e) {
+                return getDefaultState();
+            }
+        }
+
+        function saveState(msg = 'Progreso guardado') {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            updateDashboardStats();
+            renderQuickNav();
+            showToast(msg);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.remove('hidden');
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 2200);
+        }
+
+        // Helper: split "Puntos Críticos de Examen" into individual sentences for interactive check-off
+        function splitCriticalPoints(text) {
+            return text
+                .split(/\.\s+/)
+                .map(s => s.trim())
+                .filter(Boolean)
+                .map(s => s.endsWith('.') ? s : s + '.');
+        }
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        // ============================================================================
+        // RENDER SYLLABUS (OFFICIAL BLOCKS OR PEDAGOGICAL PHASES)
+        // ============================================================================
+        function renderSyllabus() {
+            const container = document.getElementById('view-temario');
+            container.innerHTML = '';
+
+            const searchVal = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
+            const filterBloque = document.getElementById('filter-bloque')?.value || 'all';
+            const filterStatus = document.getElementById('filter-status')?.value || 'all';
+
+            const groups = currentMainView === 'pedagogica' ? pedagogicalPhases : blocksMetadata;
+
+            groups.forEach(group => {
+                if (filterBloque !== 'all' && String(group.id) !== filterBloque) return;
+
+                const groupTopics = group.topicNums
+                    .map(num => topicsData.find(t => t.num === num))
+                    .filter(t => {
+                        const st = state.topics[t.num].status;
+                        if (filterStatus !== 'all' && st !== filterStatus) return false;
+                        if (searchVal) {
+                            const haystack = `tema ${t.num} ${t.title} ${t.shortSummary} ${t.enunciado} ${t.criticos} ${state.topics[t.num].notes}`.toLowerCase();
+                            if (!haystack.includes(searchVal)) return false;
+                        }
+                        return true;
+                    });
+
+                if (groupTopics.length === 0) return;
+
+                const sectionEl = document.createElement('section');
+                sectionEl.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm";
+
+                // Summary list html (if official blocks mode)
+                let summariesHtml = '';
+                if (currentMainView === 'temario' && group.summaries) {
+                    summariesHtml = `
+                        <div class="mt-4 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+                            <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Resumen de temas del bloque:</p>
+                            <ul class="grid grid-cols-1 md:grid-cols-2 gap-1.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+                                ${group.summaries.map(s => `<li class="flex items-start gap-2"><span style="color:${group.color}">•</span><span>${escapeHtml(s)}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                sectionEl.innerHTML = `
+                    <div class="p-5 sm:p-6 border-b border-slate-200 dark:border-slate-800 border-l-4 ${group.borderClass}">
+                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
+                            ${escapeHtml(group.headerTitle)}
+                        </h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                            ${escapeHtml(group.description)}
+                        </p>
+                        ${summariesHtml}
+                    </div>
+                    <div class="divide-y divide-slate-200 dark:divide-slate-800" id="group-topics-${group.id}"></div>
+                `;
+
+                const listContainer = sectionEl.querySelector(`#group-topics-${group.id}`);
+
+                groupTopics.forEach(topic => {
+                    const tState = state.topics[topic.num];
+                    const points = splitCriticalPoints(topic.criticos);
+                    const checkedCount = points.filter((_, idx) => tState.checkedPoints[idx]).length;
+
+                    const statusColors = {
+                        'Pendiente': 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-300 dark:border-slate-700',
+                        'En estudio': 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/30',
+                        'Repaso': 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30',
+                        'Dominado': 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/40'
+                    };
+
+                    const card = document.createElement('article');
+                    card.id = `tema-card-${topic.num}`;
+                    card.className = "p-5 sm:p-6 transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/20";
+
+                    card.innerHTML = `
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                            <div class="flex items-start sm:items-center gap-3">
+                                <button onclick="QuickToggleDominado(${topic.num})" title="Haz clic para activar/desactivar neurona (Dominado)" class="w-10 h-10 rounded-xl font-mono font-extrabold text-sm flex items-center justify-center shrink-0 transition-all border ${tState.status === 'Dominado' ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/20' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700'}">
+                                    T${topic.num}
+                                </button>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug">
+                                        ${escapeHtml(topic.title)}
+                                    </h3>
+                                    <div class="flex flex-wrap items-center gap-2 mt-1">
+                                        <span class="text-xs font-mono text-slate-500 dark:text-slate-400">Bloque ${topic.bloque} · Fase Pedagógica ${topic.fase}</span>
+                                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                                            Puntos críticos: ${checkedCount}/${points.length}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status Selector -->
+                            <div class="flex items-center gap-2 self-end sm:self-center no-print">
+                                <select onchange="updateTopicStatus(${topic.num}, this.value)" class="px-3 py-1.5 rounded-xl text-xs font-bold border ${statusColors[tState.status]} focus:outline-none cursor-pointer">
+                                    <option value="Pendiente" ${tState.status === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                                    <option value="En estudio" ${tState.status === 'En estudio' ? 'selected' : ''}>📖 En estudio</option>
+                                    <option value="Repaso" ${tState.status === 'Repaso' ? 'selected' : ''}>🔄 Repaso (Activa Neurona)</option>
+                                    <option value="Dominado" ${tState.status === 'Dominado' ? 'selected' : ''}>⚡ Dominado (Activa Neurona)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Enunciado Oficial (Verbatim) -->
+                        <div class="mb-4 p-3.5 rounded-xl bg-slate-100/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+                            <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                                - Enunciado Oficial:
+                            </div>
+                            <p class="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
+                                ${escapeHtml(topic.enunciado)}
+                            </p>
+                        </div>
+
+                        <!-- Puntos Críticos de Examen (Verbatim + Interactive Checklist) -->
+                        <div class="mb-4 p-4 rounded-xl bg-amber-500/5 dark:bg-slate-800/80 border border-amber-500/20 dark:border-slate-700">
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                <span class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                                    - Puntos Críticos de Examen (Texto Oficial Íntegro y Desglose Interactivo):
+                                </span>
+                            </div>
+                            <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-3 pb-3 border-b border-slate-200 dark:border-slate-700/70">
+                                ${escapeHtml(topic.criticos)}
+                            </p>
+                            <div class="space-y-2">
+                                ${points.map((pt, idx) => {
+                                    const isChecked = !!tState.checkedPoints[idx];
+                                    return `
+                                        <label class="flex items-start gap-2.5 text-xs sm:text-sm cursor-pointer group select-none">
+                                            <input type="checkbox" onchange="toggleCriticalPoint(${topic.num}, ${idx}, this.checked)" ${isChecked ? 'checked' : ''} class="mt-1 w-4 h-4 rounded accent-emerald-500 cursor-pointer shrink-0">
+                                            <span class="${isChecked ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'} group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                                                ${escapeHtml(pt)}
+                                            </span>
+                                        </label>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Personal Study Notes -->
+                        <div class="mt-3">
+                            <details class="group" ${tState.notes ? 'open' : ''}>
+                                <summary class="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-cyan-500 cursor-pointer list-none flex items-center gap-1.5">
+                                    <span>📝 Notas personales y reglas mnemotécnicas del Tema ${topic.num}</span>
+                                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800">${tState.notes ? 'Con apuntes' : 'Añadir'}</span>
+                                </summary>
+                                <textarea
+                                    oninput="updateTopicNotes(${topic.num}, this.value)"
+                                    rows="2"
+                                    placeholder="Escribe aquí tus reglas mnemotécnicas, artículos clave, puertos o dudas del Tema ${topic.num}..."
+                                    class="mt-2 w-full p-3 rounded-xl text-xs sm:text-sm bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-cyan-500 text-slate-800 dark:text-slate-200"
+                                >${escapeHtml(tState.notes)}</textarea>
+                            </details>
+                        </div>
+                    `;
+
+                    listContainer.appendChild(card);
+                });
+
+                container.appendChild(sectionEl);
+            });
+        }
+
+        // ============================================================================
+        // INTERACTIVE HANDLERS
+        // ============================================================================
+        function updateTopicStatus(num, newStatus) {
+            state.topics[num].status = newStatus;
+            saveState(`Tema ${num}: ${newStatus}`);
+            renderSyllabus();
+        }
+
+        function QuickToggleDominado(num) {
+            const curr = state.topics[num].status;
+            state.topics[num].status = curr === 'Dominado' ? 'Pendiente' : 'Dominado';
+            saveState(`Tema ${num}: ${state.topics[num].status}`);
+            renderSyllabus();
+        }
+
+        function toggleCriticalPoint(num, idx, checked) {
+            state.topics[num].checkedPoints[idx] = checked;
+            // Automatically promote status if all critical points checked
+            const topic = topicsData.find(t => t.num === num);
+            const totalPts = splitCriticalPoints(topic.criticos).length;
+            const checkedCount = Object.values(state.topics[num].checkedPoints).filter(Boolean).length;
+            if (checkedCount === totalPts && state.topics[num].status === 'Pendiente') {
+                state.topics[num].status = 'En estudio';
+            }
+            saveState(`Punto crítico actualizado (T${num})`);
+            renderSyllabus();
+        }
+
+        let notesTimeout;
+        function updateTopicNotes(num, val) {
+            state.topics[num].notes = val;
+            clearTimeout(notesTimeout);
+            notesTimeout = setTimeout(() => {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                showToast(`Notas del Tema ${num} guardadas`);
+            }, 600);
+        }
+
+        function updateDashboardStats() {
+            let dom = 0, rep = 0, est = 0, pend = 0;
+            const blockDone = { 1: 0, 2: 0, 3: 0, 4: 0 };
+            const blockTotals = { 1: 4, 2: 5, 3: 12, 4: 10 };
+
+            topicsData.forEach(t => {
+                const st = state.topics[t.num].status;
+                if (st === 'Dominado') {
+                    dom++;
+                    blockDone[t.bloque]++;
+                } else if (st === 'Repaso') {
+                    rep++;
+                    blockDone[t.bloque] += 0.75;
+                } else if (st === 'En estudio') {
+                    est++;
+                    blockDone[t.bloque] += 0.35;
+                } else {
+                    pend++;
+                }
+            });
+
+            const activeNeuronsCount = dom + rep;
+            const globalPct = Math.round(((dom + rep * 0.75 + est * 0.35) / 31) * 100);
+
+            document.getElementById('stat-global-text').textContent = `${dom}/31 Dom (${globalPct}%)`;
+            document.getElementById('stat-global-bar').style.width = `${globalPct}%`;
+            const compactPill = document.getElementById('compact-stat-pill');
+            if (compactPill) compactPill.textContent = `${dom}/31 Dom · ${globalPct}%`;
+
+            document.getElementById('stat-counts-detail').innerHTML = `
+                <span class="text-emerald-500 font-semibold">Dom: ${dom}</span>
+                <span class="text-amber-500 font-semibold">Rep: ${rep}</span>
+                <span class="text-sky-500 font-semibold">Est: ${est}</span>
+                <span>Pend: ${pend}</span>
+            `;
+
+            [1, 2, 3, 4].forEach(b => {
+                const exactDom = topicsData.filter(t => t.bloque === b && (state.topics[t.num].status === 'Dominado' || state.topics[t.num].status === 'Repaso')).length;
+                const pct = Math.min(100, Math.round((blockDone[b] / blockTotals[b]) * 100));
+                document.getElementById(`stat-b${b}-text`).textContent = `${exactDom}/${blockTotals[b]}`;
+                document.getElementById(`stat-b${b}-bar`).style.width = `${pct}%`;
+            });
+
+            const badge = document.getElementById('active-neurons-badge');
+            if (badge) badge.textContent = `${activeNeuronsCount} / 31 Neuronas Activas`;
+        }
+
+        function renderQuickNav() {
+            const grid = document.getElementById('quick-nav-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            topicsData.forEach(t => {
+                const st = state.topics[t.num].status;
+                let cls = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700';
+                if (st === 'Dominado') cls = 'bg-emerald-500 text-white border-emerald-400 font-bold';
+                else if (st === 'Repaso') cls = 'bg-amber-500 text-white border-amber-400 font-bold';
+                else if (st === 'En estudio') cls = 'bg-sky-500/20 text-sky-600 dark:text-sky-300 border-sky-500/40 font-semibold';
+
+                const btn = document.createElement('button');
+                btn.className = `py-1.5 rounded-lg text-xs font-mono border transition-transform hover:scale-105 ${cls}`;
+                btn.textContent = t.num;
+                btn.title = `${t.title} (${st})`;
+                btn.onclick = () => scrollToTopic(t.num);
+                grid.appendChild(btn);
+            });
+        }
+
+        function scrollToTopic(num) {
+            if (currentMainView === 'matriz') {
+                switchMainView('temario');
+            }
+            const card = document.getElementById(`tema-card-${num}`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.classList.add('ring-2', 'ring-cyan-500');
+                setTimeout(() => card.classList.remove('ring-2', 'ring-cyan-500'), 1800);
+            }
+        }
+
+        function switchMainView(view) {
+            currentMainView = view;
+            const tTemario = document.getElementById('tab-temario');
+            const tPedagogica = document.getElementById('tab-pedagogica');
+            const tMatriz = document.getElementById('tab-matriz');
+
+            const activeCls = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-cyan-600 text-white shadow-sm";
+            const inactiveCls = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700";
+
+            tTemario.className = view === 'temario' ? activeCls : inactiveCls;
+            tPedagogica.className = view === 'pedagogica' ? activeCls : inactiveCls;
+            tMatriz.className = view === 'matriz' ? activeCls : inactiveCls;
+
+            if (view === 'matriz') {
+                document.getElementById('view-temario').classList.add('hidden');
+                document.getElementById('view-matriz').classList.remove('hidden');
+            } else {
+                document.getElementById('view-matriz').classList.add('hidden');
+                document.getElementById('view-temario').classList.remove('hidden');
+                renderSyllabus();
+            }
+        }
+
+        function applyFilters() {
+            if (currentMainView === 'matriz') switchMainView('temario');
+            else renderSyllabus();
+        }
+
+        // Collapsible Top-Left Hamburger Header Menu Logic
+        function toggleHeaderMenu() {
+            const panel = document.getElementById('collapsible-header-panel');
+            const backdrop = document.getElementById('header-backdrop');
+            const iconHam = document.getElementById('icon-hamburger');
+            const iconClose = document.getElementById('icon-close');
+            const btn = document.getElementById('hamburger-btn');
+
+            const isHidden = panel.classList.contains('hidden');
+            if (isHidden) {
+                panel.classList.remove('hidden');
+                backdrop.classList.remove('hidden');
+                iconHam.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+            } else {
+                closeHeaderMenu();
+            }
+        }
+
+        function closeHeaderMenu() {
+            const panel = document.getElementById('collapsible-header-panel');
+            const backdrop = document.getElementById('header-backdrop');
+            const iconHam = document.getElementById('icon-hamburger');
+            const iconClose = document.getElementById('icon-close');
+            const btn = document.getElementById('hamburger-btn');
+
+            if (panel) panel.classList.add('hidden');
+            if (backdrop) backdrop.classList.add('hidden');
+            if (iconHam) iconHam.classList.remove('hidden');
+            if (iconClose) iconClose.classList.add('hidden');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeHeaderMenu();
+                closeConfirmModal();
+            }
+        });
+
+        function toggleBrainPanel() {
+            const brainCol = document.getElementById('brain-column');
+            const mainCol = document.getElementById('main-column');
+            brainCol.classList.toggle('hidden');
+            if (brainCol.classList.contains('hidden')) {
+                mainCol.classList.remove('xl:w-7/12');
+                mainCol.classList.add('w-full');
+            } else {
+                mainCol.classList.add('xl:w-7/12');
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+            document.getElementById('theme-label').textContent = isDark ? 'Modo Claro' : 'Modo Oscuro';
+        }
+
+        // Export & Import JSON
+        function exportProgress() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+            const a = document.createElement('a');
+            a.setAttribute("href", dataStr);
+            a.setAttribute("download", `progreso_sms_informatica_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showToast("Archivo JSON exportado");
+        }
+
+        function importProgress(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported && imported.topics) {
+                        state = imported;
+                        saveState("Progreso importado correctamente");
+                        renderSyllabus();
+                    }
+                } catch (err) {
+                    showToast("Error al leer el archivo JSON");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function openConfirmModal() {
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+        function executeReset() {
+            state = getDefaultState();
+            saveState("Progreso reiniciado");
+            renderSyllabus();
+            closeConfirmModal();
+        }
+
+        // ============================================================================
+        // INTERACTIVE NEURAL BRAIN CANVAS ENGINE (1 HZ SYNAPTIC PULSES)
+        // ============================================================================
+        const canvas = document.getElementById('brainCanvas');
+        const ctx = canvas.getContext('2d');
+        const tooltip = document.getElementById('canvas-tooltip');
+
+        const phaseColorMap = {
+            1: '#06b6d4', // Cyan
+            2: '#10b981', // Emerald
+            3: '#f59e0b', // Amber
+            4: '#a855f7'  // Purple
+        };
+
+        // Order nodes according to Pedagogical Sequence
+        const orderedPedagogicalNums = [
+            1, 2, 3, 4,
+            5, 6, 7, 8, 9,
+            26, 27, 28, 29, 30, 31, 22, 23, 24, 25,
+            10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21
+        ];
+
+        const orderedNodes = orderedPedagogicalNums.map(num => {
+            const t = topicsData.find(x => x.num === num);
+            return {
+                ...t,
+                color: phaseColorMap[t.fase]
+            };
+        });
+
+        let pulses = [];
+        let sparks = [];
+
+        function isNeuronActive(num) {
+            const st = state.topics[num]?.status;
+            return st === 'Dominado' || st === 'Repaso';
+        }
+
+        // Trigger electric pulse every 1000ms (1 Hz)
+        setInterval(() => {
+            const activeSeq = orderedNodes.filter(n => isNeuronActive(n.num));
+            if (activeSeq.length === 1) {
+                const node = activeSeq[0];
+                sparks.push({
+                    x: node.x,
+                    y: node.y,
+                    color: node.color,
+                    born: performance.now(),
+                    duration: 450
+                });
+            } else if (activeSeq.length > 1) {
+                const stepDuration = Math.min(220, 850 / (activeSeq.length - 1));
+                for (let i = 0; i < activeSeq.length - 1; i++) {
+                    pulses.push({
+                        from: activeSeq[i],
+                        to: activeSeq[i + 1],
+                        color: activeSeq[i + 1].color,
+                        startTime: performance.now() + i * (stepDuration * 0.75),
+                        duration: stepDuration
+                    });
+                }
+                sparks.push({
+                    x: activeSeq[0].x,
+                    y: activeSeq[0].y,
+                    color: activeSeq[0].color,
+                    born: performance.now(),
+                    duration: 320
+                });
+            }
+        }, 1000);
+
+        function drawLightning(ctx, x1, y1, x2, y2, color, alpha = 1, jitter = 6) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.globalAlpha = alpha;
+            ctx.lineWidth = 2;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 10;
+
+            const segments = 5;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            for (let i = 1; i < segments; i++) {
+                const t = i / segments;
+                const nx = x1 + (x2 - x1) * t + (Math.random() - 0.5) * jitter;
+                const ny = y1 + (y2 - y1) * t + (Math.random() - 0.5) * jitter;
+                ctx.lineTo(nx, ny);
+            }
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function drawBrainLobes(ctx) {
+            ctx.save();
+            ctx.lineWidth = 2.5;
+
+            // Lobe 1: Frontal Izquierdo (Fase 1)
+            ctx.strokeStyle = "rgba(6, 182, 212, 0.35)";
+            ctx.fillStyle = "rgba(6, 182, 212, 0.05)";
+            ctx.beginPath();
+            ctx.moveTo(372, 90);
+            ctx.bezierCurveTo(230, 90, 150, 170, 150, 290);
+            ctx.lineTo(372, 290);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Lobe 2: Frontal Derecho (Fase 2)
+            ctx.strokeStyle = "rgba(16, 185, 129, 0.35)";
+            ctx.fillStyle = "rgba(16, 185, 129, 0.05)";
+            ctx.beginPath();
+            ctx.moveTo(388, 90);
+            ctx.bezierCurveTo(530, 90, 610, 170, 610, 290);
+            ctx.lineTo(388, 290);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Lobe 3: Posterior Izquierdo (Fase 3)
+            ctx.strokeStyle = "rgba(245, 158, 11, 0.35)";
+            ctx.fillStyle = "rgba(245, 158, 11, 0.05)";
+            ctx.beginPath();
+            ctx.moveTo(145, 305);
+            ctx.bezierCurveTo(125, 430, 200, 555, 372, 555);
+            ctx.lineTo(372, 305);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Lobe 4: Posterior Derecho (Fase 4)
+            ctx.strokeStyle = "rgba(168, 85, 247, 0.35)";
+            ctx.fillStyle = "rgba(168, 85, 247, 0.05)";
+            ctx.beginPath();
+            ctx.moveTo(615, 305);
+            ctx.bezierCurveTo(635, 430, 560, 555, 388, 555);
+            ctx.lineTo(388, 305);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Labels
+            ctx.font = "bold 11px Inter, system-ui";
+            ctx.fillStyle = "rgba(6, 182, 212, 0.8)";
+            ctx.fillText("FASE 1 · E-ADMIN Y SALUD (T1-T4)", 180, 75);
+
+            ctx.fillStyle = "rgba(16, 185, 129, 0.8)";
+            ctx.fillText("FASE 2 · TECNOLOGÍA Y SO (T5-T9)", 415, 75);
+
+            ctx.fillStyle = "rgba(245, 158, 11, 0.8)";
+            ctx.fillText("FASE 3 · REDES Y SISTEMAS (T22-T31)", 165, 585);
+
+            ctx.fillStyle = "rgba(168, 85, 247, 0.8)";
+            ctx.fillText("FASE 4 · DATOS, DESARROLLO E ITIL (T10-T21)", 405, 585);
+
+            ctx.restore();
+        }
+
+        function animateBrain(now) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBrainLobes(ctx);
+
+            const activeSeq = orderedNodes.filter(n => isNeuronActive(n.num));
+
+            // 1. Background pedagogical pathway
+            ctx.save();
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+            ctx.lineWidth = 1.2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            orderedNodes.forEach((node, idx) => {
+                if (idx === 0) ctx.moveTo(node.x, node.y);
+                else ctx.lineTo(node.x, node.y);
+            });
+            ctx.stroke();
+            ctx.restore();
+
+            // 2. Active consolidated axons
+            if (activeSeq.length > 1) {
+                for (let i = 0; i < activeSeq.length - 1; i++) {
+                    const n1 = activeSeq[i];
+                    const n2 = activeSeq[i + 1];
+                    ctx.save();
+                    ctx.strokeStyle = n2.color;
+                    ctx.globalAlpha = 0.35;
+                    ctx.lineWidth = 2.2;
+                    ctx.beginPath();
+                    ctx.moveTo(n1.x, n1.y);
+                    ctx.lineTo(n2.x, n2.y);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
+
+            // 3. Electric pulses
+            pulses = pulses.filter(p => now < p.startTime + p.duration);
+            pulses.forEach(p => {
+                if (now >= p.startTime) {
+                    const prog = (now - p.startTime) / p.duration;
+                    const cx = p.from.x + (p.to.x - p.from.x) * prog;
+                    const cy = p.from.y + (p.to.y - p.from.y) * prog;
+
+                    drawLightning(ctx, p.from.x, p.from.y, cx, cy, "#ffffff", 0.9, 6);
+                    drawLightning(ctx, p.from.x, p.from.y, p.to.x, p.to.y, p.color, 0.45, 4);
+
+                    ctx.save();
+                    ctx.fillStyle = "#ffffff";
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 15;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            });
+
+            // 4. Local sparks
+            sparks = sparks.filter(s => now < s.born + s.duration);
+            sparks.forEach(s => {
+                const age = (now - s.born) / s.duration;
+                const alpha = 1 - age;
+                for (let i = 0; i < 4; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = 14 + Math.random() * 14;
+                    drawLightning(ctx, s.x, s.y, s.x + Math.cos(angle) * dist, s.y + Math.sin(angle) * dist, "#ffffff", alpha, 4);
+                }
+            });
+
+            // 5. Draw 31 Neuron Nodes
+            orderedNodes.forEach(node => {
+                const st = state.topics[node.num]?.status || 'Pendiente';
+                const active = st === 'Dominado' || st === 'Repaso';
+                const studying = st === 'En estudio';
+
+                ctx.save();
+                if (active) {
+                    ctx.fillStyle = node.color;
+                    ctx.shadowColor = node.color;
+                    ctx.shadowBlur = 14;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, 12, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = "#090d16";
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, 8.5, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = "#ffffff";
+                    ctx.font = "bold 9.5px JetBrains Mono, monospace";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(`T${node.num}`, node.x, node.y);
+                } else if (studying) {
+                    ctx.fillStyle = "#1e293b";
+                    ctx.strokeStyle = node.color;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, 11, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = "#e2e8f0";
+                    ctx.font = "bold 9px JetBrains Mono, monospace";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(`T${node.num}`, node.x, node.y);
+                } else {
+                    ctx.fillStyle = "#111827";
+                    ctx.strokeStyle = "#334155";
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, 10.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    ctx.fillStyle = "#64748b";
+                    ctx.font = "600 8.5px JetBrains Mono, monospace";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText(`T${node.num}`, node.x, node.y);
+                }
+                ctx.restore();
+            });
+
+            requestAnimationFrame(animateBrain);
+        }
+
+        // Canvas Mouse Hover & Click Interactions
+        function getMouseCanvasPos(evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (evt.clientX - rect.left) * scaleX,
+                y: (evt.clientY - rect.top) * scaleY,
+                rawX: evt.clientX - rect.left,
+                rawY: evt.clientY - rect.top
+            };
+        }
+
+        canvas.addEventListener('mousemove', (evt) => {
+            const pos = getMouseCanvasPos(evt);
+            const hit = orderedNodes.find(n => Math.hypot(n.x - pos.x, n.y - pos.y) <= 14);
+            if (hit) {
+                const st = state.topics[hit.num].status;
+                tooltip.innerHTML = `
+                    <div class="font-bold text-cyan-400">${escapeHtml(hit.shortSummary)}</div>
+                    <div class="text-[11px] text-slate-300 mt-0.5">Estado: <strong>${st}</strong> · Clic para ir al tema</div>
+                `;
+                tooltip.style.left = `${Math.min(pos.rawX + 12, canvas.clientWidth - 220)}px`;
+                tooltip.style.top = `${Math.max(10, pos.rawY - 45)}px`;
+                tooltip.classList.remove('hidden');
+            } else {
+                tooltip.classList.add('hidden');
+            }
+        });
+
+        canvas.addEventListener('mouseleave', () => tooltip.classList.add('hidden'));
+
+        canvas.addEventListener('click', (evt) => {
+            const pos = getMouseCanvasPos(evt);
+            const hit = orderedNodes.find(n => Math.hypot(n.x - pos.x, n.y - pos.y) <= 14);
+            if (hit) {
+                scrollToTopic(hit.num);
+            }
+        });
+
+        // Initialize App
+        window.onload = function () {
+            updateDashboardStats();
+            renderQuickNav();
+            renderSyllabus();
+            requestAnimationFrame(animateBrain);
+        };
+    </script>
+</body>
+</html>
